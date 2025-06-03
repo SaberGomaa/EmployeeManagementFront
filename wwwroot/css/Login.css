@@ -1,0 +1,131 @@
+* {
+    font-family: 'Cairo', 'Arial', sans-serif;
+}
+
+.body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #f4f9ff 0%, #e6eef8 100%);
+}
+
+.login-container {
+    width: 35rem;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+    .login-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, #2C3E50, #3498DB);
+    }
+
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+    .logo h1 {
+        color: #333;
+        font-size: 28px;
+        font-weight: 600;
+    }
+
+    .logo span {
+        color: #d4af37;
+    }
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+    .input-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #eee;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+    }
+
+        .input-group input:focus {
+            border-color: #2C3E50;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .remember-me input[type="checkbox"] {
+        accent-color: #2C3E50;
+    }
+
+.forgot-password {
+    color: #2C3E50;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.login-button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(90deg, #2C3E50, #3498DB);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .login-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px #2C3E50;
+    }
+
+.signup-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+    .signup-link a {
+        color: #2C3E50;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+.login-button:disabled {
+    cursor: not-allowed;
+}

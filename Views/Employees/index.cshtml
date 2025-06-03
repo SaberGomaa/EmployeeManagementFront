@@ -1,0 +1,117 @@
+﻿@model IEnumerable<Models.Entities.Employee>
+
+@{
+    ViewData["Title"] = "Employees";
+}
+
+<div class="container-fluid vh-100">
+    <div class="row h-100">
+        <!-- Form Column -->
+        <div class="col-3 d-flex align-items-center">
+            <div class="w-100">
+                <h4>Add Employee</h4>
+                <form asp-action="Create" method="post">
+                    <div class="mb-3">
+                        <label for="FirstName" class="form-label">First Name</label>
+                        <input asp-for="@Model.First().FirstName" class="form-control" />
+                        <span asp-validation-for="@Model.First().FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="LastName" class="form-label">Last Name</label>
+                        <input asp-for="@Model.First().LastName" class="form-control" />
+                        <span asp-validation-for="@Model.First().LastName" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Add</button>
+                </form>
+            </div>
+        </div>
+        <!-- Table Column -->
+        <div class="col-9">
+            <h1>Employees</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.First().Id)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().FirstName)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().LastName)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().Salary)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().DepartmentId)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.FirstName</td>
+                            <td>@item.LastName</td>
+                            <td>@item.Salary</td>
+                            <td>@item.DepartmentId</td>
+                            <td>
+                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" data-id="@item.Id" data-firstname="@item.FirstName" data-lastname="@item.LastName" data-salary="@item.Salary" data-departmentid="@item.DepartmentId">Edit</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editForm" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Employee</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editId" name="Id" />
+                    <div class="mb-3">
+                        <label for="editFirstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="editFirstName" name="FirstName" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editLastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="editLastName" name="LastName" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editSalary" class="form-label">Salary</label>
+                        <input type="number" class="form-control" id="editSalary" name="Salary" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDepartmentId" class="form-label">Department ID</label>
+                        <input type="number" class="form-control" id="editDepartmentId" name="DepartmentId" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var editModal = document.getElementById('editModal');
+        editModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute('data-id');
+            var firstName = button.getAttribute('data-firstname');
+            var lastName = button.getAttribute('data-lastname');
+            var salary = button.getAttribute('data-salary');
+            var departmentId = button.getAttribute('data-departmentid');
+            document.getElementById('editId').value = id;
+            document.getElementById('editFirstName').value = firstName;
+            document.getElementById('editLastName').value = lastName;
+            document.getElementById('editSalary').value = salary;
+            document.getElementById('editDepartmentId').value = departmentId;
+            document.getElementById('editForm').action = '/Employees/Edit/' + id;
+        });
+    </script>
+}
