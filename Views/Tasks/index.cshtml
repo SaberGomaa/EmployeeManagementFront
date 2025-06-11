@@ -73,7 +73,7 @@
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="editForm" method="post">
+            <form id="editForm" method="post" asp-action="Update">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editModalLabel">Edit Task</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -121,7 +121,7 @@
             document.getElementById('editDescription').value = description;
             document.getElementById('editStatus').value = status;
             document.getElementById('editEmployeeId').value = employeeId;
-            document.getElementById('editForm').action = '/Tasks/Edit/' + id;
+            document.getElementById('editForm').action = '/Tasks/Update';
         });
     </script>
 }

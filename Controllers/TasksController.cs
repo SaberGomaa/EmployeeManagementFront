@@ -31,73 +31,18 @@ namespace AribMVC.Controllers
             return View(departments?.Data);
         }
 
-        // GET: Controller/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: Controller/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Controller/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Update(Task Task)
         {
-            try
+            var token = Request.Cookies["token"];
+            if (!string.IsNullOrEmpty(token))
             {
-                return RedirectToAction(nameof(Index));
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Controller/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Controller/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Controller/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Controller/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var response = await _httpClient.PutAsJsonAsync("/api/Task/Update", Task);
+            response.EnsureSuccessStatusCode();
+            var result = await response.Content.ReadFromJsonAsync<GResponse<Task>>();
+            return RedirectToAction("Index");
         }
     }
 }

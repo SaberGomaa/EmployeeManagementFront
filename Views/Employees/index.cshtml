@@ -32,10 +32,9 @@
                 <thead>
                     <tr>
                         <th>@Html.DisplayNameFor(model => model.First().Id)</th>
-                        <th>@Html.DisplayNameFor(model => model.First().FirstName)</th>
-                        <th>@Html.DisplayNameFor(model => model.First().LastName)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().FullName)</th>
                         <th>@Html.DisplayNameFor(model => model.First().Salary)</th>
-                        <th>@Html.DisplayNameFor(model => model.First().DepartmentId)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().ManagerName)</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -44,10 +43,9 @@
                     {
                         <tr>
                             <td>@item.Id</td>
-                            <td>@item.FirstName</td>
-                            <td>@item.LastName</td>
+                            <td>@item.FullName</td>
                             <td>@item.Salary</td>
-                            <td>@item.DepartmentId</td>
+                            <td>@item.ManagerName</td>
                             <td>
                                 <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" data-id="@item.Id" data-firstname="@item.FirstName" data-lastname="@item.LastName" data-salary="@item.Salary" data-departmentid="@item.DepartmentId">Edit</button>
                             </td>
@@ -63,7 +61,7 @@
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="editForm" method="post">
+            <form id="editForm" method="post" action="Update">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editModalLabel">Edit Employee</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -111,7 +109,7 @@
             document.getElementById('editLastName').value = lastName;
             document.getElementById('editSalary').value = salary;
             document.getElementById('editDepartmentId').value = departmentId;
-            document.getElementById('editForm').action = '/Employees/Edit/' + id;
+            document.getElementById('editForm').action = '/Employees/Update;
         });
     </script>
 }
