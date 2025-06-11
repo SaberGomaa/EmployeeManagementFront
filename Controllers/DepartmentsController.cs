@@ -1,89 +1,33 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AribMVC.DTOs;
+using Microsoft.AspNetCore.Mvc;
+using Models.Entities;
 
 namespace AribMVC.Controllers
 {
     public class DepartmentsController : Controller
     {
         private readonly HttpClient _httpClient;
-
         public DepartmentsController(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient("BackendApi");
         }
 
-        // GET: DepartmentsController
-        public ActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            var token = Request.Cookies["token"];
 
-        // GET: DepartmentsController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: DepartmentsController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: DepartmentsController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
+            if (!string.IsNullOrEmpty(token))
             {
-                return RedirectToAction(nameof(Index));
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             }
-            catch
-            {
-                return View();
-            }
+
+            var response = await _httpClient.GetAsync("/api/Department/GetAll");
+            response.EnsureSuccessStatusCode();
+            var departments = await response.Content.ReadFromJsonAsync<GResponse<List<Department>>>();
+
+            return View(departments?.Data);
         }
 
-        // GET: DepartmentsController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: DepartmentsController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: DepartmentsController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: DepartmentsController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

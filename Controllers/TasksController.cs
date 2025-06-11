@@ -1,14 +1,34 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AribMVC.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Models.Entities;
+using Task = Models.Entities.Task;
 
 namespace AribMVC.Controllers
 {
     public class TasksController : Controller
     {
-        // GET: Controller
-        public ActionResult Index()
+
+        private readonly HttpClient _httpClient;
+        public TasksController(IHttpClientFactory httpClientFactory)
         {
-            return View();
+            _httpClient = httpClientFactory.CreateClient("BackendApi");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var token = Request.Cookies["token"];
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            }
+
+            var response = await _httpClient.GetAsync("/api/Task/GetAll");
+            response.EnsureSuccessStatusCode();
+            var departments = await response.Content.ReadFromJsonAsync<GResponse<List<Task>>>();
+
+            return View(departments?.Data);
         }
 
         // GET: Controller/Details/5

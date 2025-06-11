@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using AribMVC.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AribMVC.Controllers
@@ -7,7 +8,6 @@ namespace AribMVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -15,7 +15,8 @@ namespace AribMVC.Controllers
 
         public IActionResult Index()
         {
-            var token = Request.Cookies["token"];
+            var token =  Request.Cookies["token"];
+
             if (!string.IsNullOrEmpty(token))
             {
                 return RedirectToAction("Index", "Departments");

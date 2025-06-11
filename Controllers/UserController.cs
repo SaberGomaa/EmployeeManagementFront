@@ -1,42 +1,72 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AribMVC.DTOs;
+using DTOs;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AribMVC.Controllers
 {
     public class UserController : Controller
     {
-        // GET: UserController
+
+        private readonly HttpClient _httpClient;
+
+        public UserController(HttpClient httpClient, IHttpClientFactory httpClientFactory )
+        {
+            _httpClient = httpClient;
+        }
         public ActionResult Index()
         {
             return View();
         }
-
-        public ActionResult Login()
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginRequset model)
         {
-            string token = "example_token_value"; 
-            Response.Cookies.Append("AuthToken", token, new CookieOptions
+            if (!ModelState.IsValid)
             {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict
-            });
+                return View(model);
+            }
 
-            return RedirectToAction("Index", "Home");
+            var apiUrl = "http://www.backend.somee.com/api/User/login";
+
+            var response = await _httpClient.PostAsJsonAsync(apiUrl, model);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<GResponse<LoginResponse>>();
+
+                if (result != null && result.IsSucceeded)
+                {
+                    string token = result.Data.token;
+                    Response.Cookies.Append("token", token, new CookieOptions
+                    {
+                        HttpOnly = false,
+                        Secure = true,
+                        SameSite = SameSiteMode.Strict
+                    });
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Login failed. Invalid credentials.");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error connecting to login service.");
+            }
+
+            return View(model);
         }
-
-        // GET: UserController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: UserController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -51,13 +81,11 @@ namespace AribMVC.Controllers
             }
         }
 
-        // GET: UserController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: UserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -71,14 +99,11 @@ namespace AribMVC.Controllers
                 return View();
             }
         }
-
-        // GET: UserController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: UserController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
